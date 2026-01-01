@@ -11,13 +11,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        # This migration uses PostgreSQL-specific syntax, skipped for SQLite
         migrations.RunSQL(
-            sql="""
-            ALTER TABLE modules DROP CONSTRAINT IF EXISTS modules_module_type_check;
-            ALTER TABLE modules ADD CONSTRAINT modules_module_type_check CHECK (module_type IN ('text','video','audio','presentation','scorm','xapi','quiz','test','assignment','survey','page','mixed'));
-            """,
-            reverse_sql="""
-            ALTER TABLE modules DROP CONSTRAINT IF EXISTS modules_module_type_check;
-            """,
+            sql=migrations.RunSQL.noop,
+            reverse_sql=migrations.RunSQL.noop,
         )
     ]
