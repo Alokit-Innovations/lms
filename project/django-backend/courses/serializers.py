@@ -85,8 +85,8 @@ class SurveySerializer(serializers.ModelSerializer):
 
 class UnitSerializer(serializers.ModelSerializer):
     # Backwards-compatible fields: accept `type` and `order` from frontend
-    type = serializers.CharField(source='module_type')
-    order = serializers.IntegerField(source='sequence_order', required=False)
+    type = serializers.CharField(source='module_type', required=False)
+    order = serializers.IntegerField(source='sequence_order', required=False, allow_null=True)
 
     video_details = VideoUnitSerializer(read_only=True)
     audio_details = AudioUnitSerializer(read_only=True)
@@ -100,15 +100,18 @@ class UnitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Unit
-        # include all model fields plus the alias fields above
-        fields = '__all__'
+        fields = [
+            'id', 'course', 'title', 'description', 'module_type', 'sequence_order',
+            'is_mandatory', 'created_at', 'updated_at',
+            'type', 'order',
+            'video_details', 'audio_details', 'presentation_details', 'text_details',
+            'page_details', 'quiz_details', 'assignment_details', 'scorm_details', 'survey_details'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+        validators = []
 
     def validate(self, attrs):
-        """Ensure sequence_order is unique per course and provide a clear error.
-
-        This avoids leaking a 500 IntegrityError back to the client when a
-        duplicate sequence_order is provided.
-        """
+        """Ensure sequence_order is unique per course and provide a clear error."""
         course = attrs.get('course')
         seq = attrs.get('sequence_order')
 

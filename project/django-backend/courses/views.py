@@ -269,7 +269,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     def enrollment_stats(self, request, pk=None):
         course = self.get_object()
         enrollments = Enrollment.objects.filter(course=course)
-        total_learners = Profile.objects.filter(role='learner').count()
+        total_learners = Profile.objects.filter(primary_role='trainee').count()
         return Response({
             'total_enrolled': enrollments.count(),
             'total_learners': total_learners,
@@ -430,7 +430,7 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
         course_id = self.request.query_params.get('course_id')
 
         queryset = Enrollment.objects.all()
-        if user.role == 'learner':
+        if user.primary_role == 'trainee':
             queryset = queryset.filter(user=user)
         elif course_id:
             queryset = queryset.filter(course_id=course_id)
@@ -500,7 +500,7 @@ class AssignmentSubmissionViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == 'trainer':
+        if user.primary_role == 'trainer':
             return AssignmentSubmission.objects.all()
         return AssignmentSubmission.objects.filter(user=user)
 
@@ -522,7 +522,7 @@ class QuizAttemptViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == 'learner':
+        if user.primary_role == 'trainee':
             return QuizAttempt.objects.filter(user=user)
         return QuizAttempt.objects.all()
 
