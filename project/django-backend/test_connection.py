@@ -6,7 +6,7 @@ import sys
 try:
     print("Attempting to connect to PostgreSQL via Pinggy tunnel...")
     conn = psycopg2.connect(
-        host='zhyyz-106-213-84-233.a.free.pinggy.link',
+        host='dktsk-2401-4900-1c2c-1c4b-edd3-b246-f49f-47fd.a.free.pinggy.link',
         port='5432',
         database='lms',
         user='postgres',

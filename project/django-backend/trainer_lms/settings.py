@@ -56,14 +56,22 @@ WSGI_APPLICATION = 'trainer_lms.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lms',
-        'USER': 'postgres',
-        'PASSWORD': 'Admin@123',
-        'HOST': 'zhyyz-106-213-84-233.a.free.pinggy.link',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# PostgreSQL via Pinggy tunnel (switch to this once tunnel is verified)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'lms',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Admin@123',
+#         'HOST': 'dktsk-2401-4900-1c2c-1c4b-edd3-b246-f49f-47fd.a.free.pinggy.link',
+#         'PORT': '5432',
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
