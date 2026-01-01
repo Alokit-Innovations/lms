@@ -54,24 +54,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'trainer_lms.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# Database Configuration - Supports both SQLite and PostgreSQL
+# Set DB_ENGINE to 'postgresql' to use PostgreSQL, or 'sqlite3' for SQLite
+DB_ENGINE = config('DB_ENGINE', default='sqlite3')
 
-# PostgreSQL via Pinggy tunnel (switch to this once tunnel is verified)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'lms',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Admin@123',
-#         'HOST': 'dktsk-2401-4900-1c2c-1c4b-edd3-b246-f49f-47fd.a.free.pinggy.link',
-#         'PORT': '5432',
-#     }
-# }
+if DB_ENGINE == 'postgresql':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='lms'),
+            'USER': config('DB_USER', default='postgres'),
+            'PASSWORD': config('DB_PASSWORD', default='postgres'),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+# MongoDB Configuration
+MONGODB_ENABLED = config('MONGODB_ENABLED', default=False, cast=bool)
+MONGODB_URI = config('MONGODB_URI', default='mongodb://localhost:27017')
+MONGODB_DB_NAME = config('MONGODB_DB_NAME', default='lms')
 
 AUTH_PASSWORD_VALIDATORS = [
     {
